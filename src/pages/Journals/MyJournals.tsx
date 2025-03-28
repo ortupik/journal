@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
-import { getAllJournals } from "@/actions/journal";
+import { getAllJournals } from '@/actions/journal';
 
-import DeleteModal from "./DeleteModal";
-import LoadMore from "../common/LoadMore";
-import JournalCard from "./JournalCard"; 
-import Loader from "../common/Loader";
+import DeleteModal from './DeleteModal';
+import LoadMore from '../common/LoadMore';
+import JournalCard from './JournalCard';
+import Loader from '../common/Loader';
 
 type JournalResponse = {
   id: string;
@@ -22,31 +22,30 @@ type JournalResponse = {
 };
 
 function MyJournals() {
-  const [journals, setJournals] = useState<JournalResponse[]>([]);
-  const [modal, setModal] = useState("");
+  const queryClient = useQueryClient();
+  const [modal, setModal] = useState('');
   const router = useRouter();
 
-  const {
-    isLoading,
-    hasNextPage,
-    isFetching,
-    fetchNextPage,
-  } = useInfiniteQuery({
-    queryKey: ["journals"],
-    queryFn: getAllJournals,
-    getNextPageParam: (lastPage) => lastPage.length === 10,
-    onSuccess: (data) => {
-       setJournals(data.pages.flat() as JournalResponse[])
-    },
-   
-   
-  },
-);
+  const { data, isLoading, hasNextPage, isFetching, fetchNextPage } =
+    useInfiniteQuery({
+      queryKey: ['journals'],
+      queryFn: getAllJournals,
+      getNextPageParam: (lastPage) => lastPage.length === 10
+    });
+
+  // Flatten journals from pages
+  const journals = data?.pages.flat() || [];
 
   const onDeleteBtnClk = (id: string) => setModal(id);
-  const closeModal = () => setModal("");
+  const closeModal = () => setModal('');
 
-  if (isLoading) return <Loader wrapperCls="h-[calc(100vh-112px)]" />;
+  const handleDeleteSuccess = () => {
+    // Invalidate and refetch journals
+    queryClient.invalidateQueries({ queryKey: ['journals'] });
+    closeModal();
+  };
+
+  if (isLoading) return <Loader wrapperCls='h-[calc(100vh-112px)]' />;
 
   return (
     <>
@@ -61,7 +60,7 @@ function MyJournals() {
           sentiment={journal.sentiment}
           date={journal.updatedAt}
           onDeleteBtnClk={() => onDeleteBtnClk(journal.id)}
-          onCardClk={() => router.push(`/dashboard/journal/${journal.id}`)}
+          onCardClk={() => router.push(`/dashboard/journals/${journal.id}`)}
         />
       ))}
 
@@ -69,7 +68,7 @@ function MyJournals() {
         <LoadMore fn={() => fetchNextPage({ pageParam: journals.length })} />
       )}
 
-      {isFetching && <Loader loaderCls=" w" />}
+      {isFetching && <Loader loaderCls=' w' />}
 
       {modal && <DeleteModal id={modal} closeModal={closeModal} />}
     </>

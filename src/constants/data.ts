@@ -1,6 +1,5 @@
 import { NavItem } from 'types';
 
-
 //Info: The following data is used for the sidebar navigation and Cmd K bar.
 export const navItems: NavItem[] = [
   {
@@ -9,19 +8,19 @@ export const navItems: NavItem[] = [
     icon: 'dashboard',
     isActive: true,
     shortcut: ['d', 'd'],
-    items: [] // Empty array as there are no child items for Dashboard
+    items: []
   },
   {
     title: 'Summary',
     url: '/dashboard/summary',
-    icon: 'product',
+    icon: 'chart',
     shortcut: ['p', 'p'],
     isActive: false,
     items: [] // No child items
   },
   {
     title: 'Settings',
-    url: '#', // Placeholder as there is no direct link for the parent
+    url: '#',
     icon: 'settings',
     isActive: true,
 
@@ -29,10 +28,9 @@ export const navItems: NavItem[] = [
       {
         title: 'Profile',
         url: '/dashboard/profile',
-        icon: 'userPen',
+        icon: 'userx',
         shortcut: ['m', 'm']
       }
     ]
-  },
-  
+  }
 ];

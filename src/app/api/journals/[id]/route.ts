@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import prisma from '@prisma/client';
+import prisma from 'prisma/client';
 import { journalSchema } from '@/app/api/utils/validations';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'; // Import authOptions
@@ -69,20 +69,24 @@ export async function PUT(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
+
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await context.params;
+
     await prisma.journal.deleteMany({
-      where: { id: params.id, userId: session.user.id } // Ensure user owns the journal
+      where: { id, userId: session.user.id } // Ensure user owns the journal
     });
 
     return NextResponse.json({ message: 'Journal entry deleted successfully' });
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: 'Failed to delete journal entry' },
       { status: 500 }

@@ -1,9 +1,9 @@
 export const root = {
-  baseUrl: "/api",
+  baseUrl: '/api'
 };
 
 const endPoints = {
-  journal: `/journal`,
+  journals: `/journals`
 };
 
 export default endPoints;

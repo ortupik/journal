@@ -1,6 +1,6 @@
-import sendApiReq from "@/app/api/utils/sendApiReq";
-import endPoints from "@/app/api/utils/endPoints";
-import { PROMPTS } from "@/app/api/ai/prompts"; // ✅ Import prompts
+import sendApiReq from '@/app/api/utils/sendApiReq';
+import endPoints from '@/app/api/utils/endPoints';
+import { PROMPTS } from '@/app/api/ai/prompts'; // ✅ Import prompts
 
 export type JournalEntryData = {
   title: string;
@@ -26,42 +26,47 @@ export type JournalResponse = {
 // ✅ Fetch all journal entries
 export function getAllJournals(): Promise<JournalResponse[]> {
   return sendApiReq<JournalResponse[]>({
-    url: endPoints.journal,
-    method: "GET",
+    url: endPoints.journals,
+    method: 'GET'
   });
 }
 
 // ✅ Fetch a single journal entry by ID
 export function getJournalById(id: string): Promise<JournalResponse> {
   return sendApiReq<JournalResponse>({
-    url: `${endPoints.journal}/${id}`,
-    method: "GET",
+    url: `${endPoints.journals}/${id}`,
+    method: 'GET'
   });
 }
 
 // ✅ Create a new journal entry
-export function createJournal(data: JournalEntryData): Promise<JournalResponse> {
+export function createJournal(
+  data: JournalEntryData
+): Promise<JournalResponse> {
   return sendApiReq<JournalResponse>({
-    url: endPoints.journal,
-    method: "POST",
-    data,
+    url: endPoints.journals,
+    method: 'POST',
+    data
   });
 }
 
 // ✅ Update an existing journal entry
-export function updateJournal(id: string, data: JournalEntryData): Promise<JournalResponse> {
+export function updateJournal(
+  id: string,
+  data: JournalEntryData
+): Promise<JournalResponse> {
   return sendApiReq<JournalResponse>({
-    url: `${endPoints.journal}/${id}`,
-    method: "PUT",
-    data,
+    url: `${endPoints.journals}/${id}`,
+    method: 'PUT',
+    data
   });
 }
 
 // ✅ Delete a journal entry
 export function deleteJournal(id: string): Promise<{ message: string }> {
   return sendApiReq<{ message: string }>({
-    url: `${endPoints.journal}/${id}`,
-    method: "DELETE",
+    url: `${endPoints.journals}/${id}`,
+    method: 'DELETE'
   });
 }
 
@@ -69,27 +74,33 @@ export function deleteJournal(id: string): Promise<{ message: string }> {
 export type PromptType = keyof typeof PROMPTS;
 
 // ✅ Centralized AI Processing Function
-export function processAI<T>(promptType: PromptType, content: string): Promise<T> {
-
+export function processAI<T>(
+  promptType: PromptType,
+  content: string
+): Promise<T> {
   return sendApiReq<T>({
-    url: `${endPoints.journal}/process-ai`,
-    method: "POST",
+    url: `${endPoints.journals}/process-ai`,
+    method: 'POST',
     data: { promptType, content },
-    isAuthenticated: false, // ✅ AI processing may not require authentication
+    isAuthenticated: false // ✅ AI processing may not require authentication
   });
 }
 
 // ✅ Suggest a category based on content
-export function suggestCategory(content: string): Promise<{ suggestedCategory: string }> {
-  return processAI<{ suggestedCategory: string }>("category", content);
+export function suggestCategory(
+  content: string
+): Promise<{ suggestedCategory: string }> {
+  return processAI<{ suggestedCategory: string }>('category', content);
 }
 
 // ✅ Determine sentiment analysis
-export function suggestSentiment(content: string): Promise<{ sentiment: string }> {
-  return processAI<{ sentiment: string }>("sentiment", content);
+export function suggestSentiment(
+  content: string
+): Promise<{ sentiment: string }> {
+  return processAI<{ sentiment: string }>('sentiment', content);
 }
 
 // ✅ Generate a summary of the journal entry
 export function generateSummary(content: string): Promise<{ summary: string }> {
-  return processAI<{ summary: string }>("summary", content);
+  return processAI<{ summary: string }>('summary', content);
 }
