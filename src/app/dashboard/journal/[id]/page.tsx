@@ -1,4 +1,4 @@
-import JournalDetails from '@/components/journal//JournalDetails';
+import JournalDetails from '@/components/journal/JournalDetails';
 
 function Page() {
   return <JournalDetails />;

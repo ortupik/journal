@@ -105,7 +105,7 @@ function AddJournal() {
     mutationFn: createJournal,
     onSuccess: () => {
       successNotify('Your journal entry has been successfully created!');
-      router.push('/dashboard/');
+      router.push('/dashboard/journal/all');
     },
     onError: (error) => {
       console.error('Failed to create journal:', error);

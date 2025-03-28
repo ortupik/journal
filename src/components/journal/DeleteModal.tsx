@@ -26,7 +26,7 @@ function DeleteModal({ id, closeModal }: Props) {
       closeModal();
 
       // Redirect to the journals page
-      router.push('/dashboard/journals');
+      router.push('/dashboard/journal/all');
     },
     onError: (error) => {
       // Optional: Handle any errors during deletion

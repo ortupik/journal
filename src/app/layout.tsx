@@ -11,8 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Next Shadcn',
-  description: 'Basic dashboard with Next.js and Shadcn'
+  title: 'Shamiri Journal',
+  description: 'Personal Journal'
 };
 
 const lato = Lato({

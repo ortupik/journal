@@ -5,7 +5,7 @@ import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useRouter } from 'next/navigation';
-import MyJournals from '@/components/journal/MyJournals';
+import MyJournals from '@/components/journal/JournalList';
 
 // Placeholder components since original imports are not supported
 const PageContainer: React.FC<{ children: React.ReactNode }> = ({
@@ -16,7 +16,7 @@ export default function OverViewLayout() {
   const router = useRouter();
 
   const handleAddJournal = () => {
-    router.push('/dashboard/create-journal');
+    router.push('/dashboard/journal/new');
   };
   return (
     <PageContainer>

@@ -21,7 +21,7 @@ type JournalResponse = {
   updatedAt: string;
 };
 
-export default function MyJournals() {
+export default function JournalList() {
   const queryClient = useQueryClient();
   const [modal, setModal] = useState('');
   const router = useRouter();
@@ -33,7 +33,6 @@ export default function MyJournals() {
       getNextPageParam: (lastPage) => lastPage.length === 10
     });
 
-  // Flatten journals from pages
   const journals = data?.pages.flat() || [];
 
   const onDeleteBtnClk = (id: string) => setModal(id);
@@ -54,7 +53,7 @@ export default function MyJournals() {
           sentiment={journal.sentiment}
           date={journal.updatedAt}
           onDeleteBtnClk={() => onDeleteBtnClk(journal.id)}
-          onCardClk={() => router.push(`/dashboard/journals/${journal.id}`)}
+          onCardClk={() => router.push(`/dashboard/journal/${journal.id}`)}
         />
       ))}
 

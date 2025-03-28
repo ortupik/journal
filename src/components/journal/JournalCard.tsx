@@ -66,7 +66,7 @@ function JournalCard({
 
       <div className='mt-4 flex justify-end gap-2'>
         <Link
-          href={`/dashboard/edit-journal/${id}`}
+          href={`/dashboard/journal/edit/${id}`}
           className='flex items-center rounded-md border border-blue-300 px-3 py-1 text-xs text-blue-600 transition hover:bg-blue-100'
           onClick={(e) => e.stopPropagation()}
         >

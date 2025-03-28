@@ -94,7 +94,6 @@ function JournalDetails() {
         {new Date(journal.updatedAt).toLocaleDateString()}
       </p>
 
-      {/* Category & Sentiment Badges */}
       <div className='mt-3 flex items-center gap-2'>
         <span
           className={`rounded-full px-2 py-1 text-xs ${categoryColors[journal.category] || 'bg-gray-200 text-gray-800'}`}
@@ -121,14 +120,14 @@ function JournalDetails() {
 
       <div className='mt-6 flex justify-between'>
         <Link
-          href='/dashboard/my-journals'
+          href='/dashboard/journal'
           className='rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-600 transition hover:border-blue-500 hover:text-blue-500'
         >
           ← Back to Journals
         </Link>
 
         <Link
-          href={`/dashboard/edit-journal/${journal.id}`}
+          href={`/dashboard/journal/edit/${journal.id}`}
           className='rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition hover:bg-blue-600'
         >
           Edit Journal

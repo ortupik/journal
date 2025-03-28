@@ -125,7 +125,7 @@ function EditJournal() {
       updateJournal(id, data),
     onSuccess: () => {
       successNotify('Journal updated successfully');
-      router.push('/my-journals');
+      router.push('/dashboard/journal/all');
     },
     onError: (error) => {
       console.error('Failed to update journal:', error);
