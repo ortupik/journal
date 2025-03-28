@@ -1,7 +1,7 @@
-import Loader from "@/pages/Common/Loader"
+import Loader from '@/components/common/Loader';
 
 function loading() {
-  return <Loader wrapperCls="h-screen" />
+  return <Loader wrapperCls='h-screen' />;
 }
 
-export default loading
+export default loading;

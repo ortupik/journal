@@ -1,5 +1,5 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
-import Summary from '@/pages/Journals/SummaryView';
+import Summary from '@/components/journal/SummaryView';
 
 function Page() {
   return (

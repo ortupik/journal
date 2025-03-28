@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import AuthProvider from '@/pages/auth/AuthProviderBtns';
+import AuthProvider from '@/components/auth/AuthProviderBtns';
 import Form from './Form';
 
 function page() {

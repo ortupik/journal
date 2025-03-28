@@ -4,9 +4,9 @@ import type { Metadata } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Lato } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
-import ClientWrapper from "@/pages/common/ClientWrapper";
+import ClientWrapper from '@/components/common/ClientWrapper';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'; 
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import 'react-toastify/dist/ReactToastify.css';
 import './globals.css';
 
@@ -14,8 +14,6 @@ export const metadata: Metadata = {
   title: 'Next Shadcn',
   description: 'Basic dashboard with Next.js and Shadcn'
 };
-
-
 
 const lato = Lato({
   subsets: ['latin'],
@@ -36,9 +34,9 @@ export default async function RootLayout({
   return (
     <html lang='en' className={`${lato.className}`} suppressHydrationWarning>
       <head>
-        <link 
-          rel="stylesheet" 
-          href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" 
+        <link
+          rel='stylesheet'
+          href='https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap'
         />
       </head>
       <body className={'overflow-hidden'}>

@@ -1,5 +1,5 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
-import EditJournal from '@/pages/Journals/EditJournal';
+import EditJournal from '@/components/journal/EditJournal';
 
 function Page() {
   return (

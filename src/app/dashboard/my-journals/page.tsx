@@ -5,12 +5,12 @@ import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useRouter } from 'next/navigation';
-import MyJournals from '@/pages/Journals/MyJournals';
+import MyJournals from '@/components/journal/MyJournals';
 
 // Placeholder components since original imports are not supported
-const PageContainer = ({ children }) => (
-  <div className='container mx-auto max-w-4xl px-4'>{children}</div>
-);
+const PageContainer: React.FC<{ children: React.ReactNode }> = ({
+  children
+}) => <div className='container mx-auto max-w-4xl px-4'>{children}</div>;
 
 export default function OverViewLayout() {
   const router = useRouter();

@@ -44,7 +44,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
-import { Icons } from '../icons';
+import { Icons } from '@/components/ui/icons';
 
 export const company = {
   name: 'Shamiri Journal',
