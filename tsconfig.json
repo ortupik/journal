@@ -25,6 +25,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
+    "prisma/**/*",
     "types/next-auth.d.ts",
     "middleware.ts"
   ],

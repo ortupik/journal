@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { useState, useMemo, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { format, parseISO, isWithinInterval } from "date-fns";
-import { getAllJournals } from "@/actions/journal";
-import Loader from "../common/Loader";
-import ErrorBoundary from "../common/ErrorBoundary";
+import { useState, useMemo, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { format, parseISO, isWithinInterval } from 'date-fns';
+import { getAllJournals } from '@/actions/journal';
+import Loader from '../common/Loader';
+import ErrorBoundary from '../common/ErrorBoundary';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 // Date Range Picker Component
-import DateRangePicker from "../common/DateRangePicker";
+import DateRangePicker from '../common/DateRangePicker';
 
 // Visualization Components
-import CategoryDistribution from "./charts/CategoryDistribution";
-import WordCountTrends from "./charts/WordCountTrends";
-import TimeOfDayAnalysis from "./charts/TimeOfDayAnalysis";
-import WordCloudChart from "./charts/WordCloudChart";
-import EntryFrequencyHeatmap from "./charts/EntryFrequencyHeatmap";
-import AvgEntryLength from "./charts/AvgEntryLength";
+import CategoryDistribution from './charts/CategoryDistribution';
+import WordCountTrends from './charts/WordCountTrends';
+import TimeOfDayAnalysis from './charts/TimeOfDayAnalysis';
+import WordCloudChart from './charts/WordCloudChart';
+import EntryFrequencyHeatmap from './charts/EntryFrequencyHeatmap';
+import AvgEntryLength from './charts/AvgEntryLength';
 import MoodDistribution from './charts/MoodDistribution';
 
 // Enhanced Type Definitions
@@ -37,8 +37,8 @@ interface DateRange {
 
 // Utility Functions for Data Processing
 const processJournalData = (entries: JournalEntry[], dateRange?: DateRange) => {
-  const filteredEntries = dateRange 
-    ? entries.filter(entry => 
+  const filteredEntries = dateRange
+    ? entries.filter((entry) =>
         isWithinInterval(parseISO(entry.updatedAt), dateRange)
       )
     : entries;
@@ -55,38 +55,47 @@ const processJournalData = (entries: JournalEntry[], dateRange?: DateRange) => {
 };
 
 // Detailed Data Processing Functions
-const calculateCategoryDistribution = (entries: JournalEntry[]) => 
-  entries.reduce((acc, entry) => {
-    acc[entry.category] = (acc[entry.category] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+const calculateCategoryDistribution = (entries: JournalEntry[]) =>
+  entries.reduce(
+    (acc, entry) => {
+      acc[entry.category] = (acc[entry.category] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>
+  );
 
-const calculateWordTrends = (entries: JournalEntry[]) => 
+const calculateWordTrends = (entries: JournalEntry[]) =>
   entries.map((entry) => ({
     date: format(parseISO(entry.updatedAt), 'yyyy-MM-dd'),
-    words: entry.content.split(/\s+/).length,
+    words: entry.content.split(/\s+/).length
   }));
 
-const calculateTimeOfDayData = (entries: JournalEntry[]) => 
+const calculateTimeOfDayData = (entries: JournalEntry[]) =>
   Object.entries(
-    entries.reduce((acc, entry) => {
-      const hour = parseISO(entry.updatedAt).getHours();
-      acc[hour] = (acc[hour] || 0) + 1;
-      return acc;
-    }, {} as Record<number, number>)
-  ).map(([hour, count]) => ({ 
-    hour: Number(hour), 
-    count 
+    entries.reduce(
+      (acc, entry) => {
+        const hour = parseISO(entry.updatedAt).getHours();
+        acc[hour] = (acc[hour] || 0) + 1;
+        return acc;
+      },
+      {} as Record<number, number>
+    )
+  ).map(([hour, count]) => ({
+    hour: Number(hour),
+    count
   }));
 
 const calculateWordCloudData = (entries: JournalEntry[]) => {
   const wordCounts = entries
     .flatMap((entry) => entry.content.toLowerCase().split(/\s+/))
-    .filter(word => word.length > 2) // Filter out short words
-    .reduce((acc, word) => {
-      acc[word] = (acc[word] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    .filter((word) => word.length > 2) // Filter out short words
+    .reduce(
+      (acc, word) => {
+        acc[word] = (acc[word] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
   return Object.entries(wordCounts)
     .map(([text, value]) => ({ text, value: Number(value) }))
@@ -94,7 +103,7 @@ const calculateWordCloudData = (entries: JournalEntry[]) => {
     .slice(0, 50); // Limit to top 50 words
 };
 
-const calculateAvgEntryLength = (entries: JournalEntry[]) => 
+const calculateAvgEntryLength = (entries: JournalEntry[]) =>
   Object.entries(
     entries.reduce<Record<string, { totalWords: number; count: number }>>(
       (acc, entry) => {
@@ -110,7 +119,7 @@ const calculateAvgEntryLength = (entries: JournalEntry[]) =>
     )
   ).map(([category, { totalWords, count }]) => ({
     category,
-    avgWords: count ? totalWords / count : 0,
+    avgWords: count ? totalWords / count : 0
   }));
 
 const calculateEntryFrequency = (entries: JournalEntry[]) => {
@@ -137,21 +146,19 @@ const calculateMoodDistribution = (entries: JournalEntry[]) => {
   }, {});
 };
 
-
-
 // Main Summary View Component
 const SummaryView: React.FC = () => {
   // State for date range selection
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
 
   // Fetch journal entries
-  const { 
-    data: journalData, 
-    isLoading, 
-    error 
+  const {
+    data: journalData,
+    isLoading,
+    error
   } = useQuery<JournalEntry[]>({
-    queryKey: ["journals", dateRange],
-    queryFn: getAllJournals,
+    queryKey: ['journals', dateRange],
+    queryFn: getAllJournals
   });
 
   // Memoized data processing with date range support
@@ -166,54 +173,45 @@ const SummaryView: React.FC = () => {
   }, []);
 
   // Render loading state
-  if (isLoading) return <Loader wrapperCls="h-[calc(100vh-112px)]" />;
+  if (isLoading) return <Loader wrapperCls='h-[calc(100vh-112px)]' />;
 
   // Handle error state
-  if (error) return (
-    <div className="p-4 text-red-500">
-      Error loading journal entries
-    </div>
-  );
+  if (error)
+    return (
+      <div className='p-4 text-red-500'>Error loading journal entries</div>
+    );
 
   // No entries found
-  if (!processedData) return (
-    <div className="p-4 text-gray-500">
-      No journal entries found.
-    </div>
-  );
+  if (!processedData)
+    return <div className='p-4 text-gray-500'>No journal entries found.</div>;
 
-  console.log(processedData.moodDistribution)
-
+  console.log(processedData.moodDistribution);
 
   return (
+    <ScrollArea className='h-[calc(100dvh - 100px)]'>
+      <ErrorBoundary>
+        <div className='mb-4 space-y-4 p-4'>
+          <DateRangePicker
+            onDateRangeChange={handleDateRangeChange}
+            initialRange={dateRange}
+          />
 
-    <ScrollArea className='h-[calc(100dvh - 100px)] '>
-    <ErrorBoundary>
-      <div className="space-y-4 p-4 mb-4">
-        <DateRangePicker 
-          onDateRangeChange={handleDateRangeChange}
-          initialRange={dateRange}
-        />
-     
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <CategoryDistribution data={processedData.categoryDistribution} />
-          <WordCountTrends data={processedData.wordTrends} />
-          <TimeOfDayAnalysis data={processedData.timeOfDayData} />
-          <EntryFrequencyHeatmap data={processedData.entryFrequencyArray} />
-          <AvgEntryLength data={processedData.avgEntryLengthData} />
-          {Object.keys(processedData.moodDistribution).length > 0 && (
-            <div>
-              <MoodDistribution data={processedData.moodDistribution} />
-            </div>
-          )}
-         <WordCloudChart data={processedData.wordCloudData} />
+          <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2'>
+            <CategoryDistribution data={processedData.categoryDistribution} />
+            <WordCountTrends data={processedData.wordTrends} />
+            <TimeOfDayAnalysis data={processedData.timeOfDayData} />
+            <EntryFrequencyHeatmap data={processedData.entryFrequencyArray} />
+            <AvgEntryLength data={processedData.avgEntryLengthData} />
+            {Object.keys(processedData.moodDistribution).length > 0 && (
+              <div>
+                <MoodDistribution data={processedData.moodDistribution} />
+              </div>
+            )}
+            <WordCloudChart data={processedData.wordCloudData} />
+          </div>
         </div>
-        
-      </div>
-    </ErrorBoundary>
-
+      </ErrorBoundary>
     </ScrollArea>
-
   );
 };
 
