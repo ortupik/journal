@@ -12,7 +12,7 @@ Ensure you have the following installed on your system:
 
 ## Clone the Repository
 ```sh
-git clone https://github.com/ortupi/journal.git
+git clone https://github.com/ortupik/journal.git
 cd journal.git
 ```
 
