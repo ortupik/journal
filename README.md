@@ -1,3 +1,6 @@
+
+---
+
 # Project Setup Documentation
 
 ## Prerequisites
@@ -57,6 +60,10 @@ Replace the placeholder values with your actual credentials.
    ```sh
    npx prisma db seed
    ```
+6. **Login Credentials**:  
+   After seeding the database, you can log in using the following credentials:  
+   - **Email**: `johndoe@email.com`  
+   - **Password**: `#Password123`
 
 ## Running the Application
 To start the development server, run:
@@ -102,8 +109,7 @@ For deploying the application, follow these steps:
    ```
 3. **Start the application**:
    ```sh
-   npm run dev or
    npm run build && npm start
    ```
 
-
+---
