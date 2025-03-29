@@ -64,8 +64,6 @@ export async function POST(req: Request) {
     const prompt = generatePrompt(content);
     const result = await callOllamaAI(prompt);
 
-    console.log(promptType);
-
     return NextResponse.json({ result }, { status: 200 });
   } catch (error) {
     console.error(`AI API Error [${req.method}]:`, error);

@@ -62,7 +62,10 @@ function JournalCard({
       </p>
       <h2 className='mt-1 text-lg font-semibold text-gray-900'>{title}</h2>
 
-      <p className='mt-2 text-sm text-gray-700'>{content}</p>
+      <p
+        className='mt-2 text-sm text-gray-700'
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
 
       <div className='mt-4 flex justify-end gap-2'>
         <Link

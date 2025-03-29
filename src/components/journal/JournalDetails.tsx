@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import Loader from '../common/Loader';
+import { useEffect, useState } from 'react';
 
 type JournalDetailsProps = {
   id: string;
@@ -115,7 +115,10 @@ function JournalDetails() {
 
       <div className='mt-6'>
         <h3 className='font-semibold text-gray-700'>Full Entry:</h3>
-        <p className='mt-2 text-gray-900'>{journal.content}</p>
+        <div
+          className='mt-2 text-gray-900'
+          dangerouslySetInnerHTML={{ __html: journal.content }}
+        />
       </div>
 
       <div className='mt-6 flex justify-between'>

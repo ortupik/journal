@@ -2,7 +2,7 @@
 ---
 
 # Project Setup Documentation
-*(Please Check SystemDesign.md for detailed system documentation)*
+### *(Please Check SystemDesign.md or SystemDesign.pdf for detailed system documentation)*
 
 
 ## Prerequisites

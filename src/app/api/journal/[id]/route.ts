@@ -40,7 +40,7 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     const journalEntry = await prisma.journal.findFirst({
       where: { id, userId: session.user.id } // Filter by session user ID
@@ -122,7 +122,7 @@ export async function PUT(
       );
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     await prisma.journal.updateMany({
       where: { id, userId: session.user.id }, // Ensure the user owns the journal
