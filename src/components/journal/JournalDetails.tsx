@@ -64,7 +64,7 @@ function JournalDetails() {
     async function fetchJournal() {
       try {
         console.log(id);
-        const response = await fetch(`/api/journals/${id}`);
+        const response = await fetch(`/api/journal/${id}`);
         const data = await response.json();
         if (response.ok) {
           setJournal(data);

@@ -3,7 +3,7 @@ export const root = {
 };
 
 const endPoints = {
-  journals: `/journals`
+  journal: `/journal`
 };
 
 export default endPoints;

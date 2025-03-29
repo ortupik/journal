@@ -14,13 +14,81 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET)
 if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET)
   throw new Error('GitHub OAuth credentials are missing!');
 
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   - name: Auth
+ *     description: Authentication endpoints
+ */
+
+/**
+ * @swagger
+ * /api/auth/session:
+ *   get:
+ *     summary: Get user session
+ *     description: Returns the current authenticated user session.
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved session
+ *       401:
+ *         description: Unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/auth/signin:
+ *   post:
+ *     summary: Sign in a user
+ *     description: Authenticates a user using email/password or OAuth providers.
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *             required:
+ *               - email
+ *               - password
+ *     responses:
+ *       200:
+ *         description: Successfully authenticated
+ *       400:
+ *         description: Invalid credentials
+ *       401:
+ *         description: Unauthorized
+ */
+
 const CredentialsSchema = z.object({
   email: z.string().email('Invalid email format'),
   password: z.string().min(6, 'Password must be at least 6 characters')
 });
 
+/**
+ * Authentication configuration for NextAuth
+ * @type {NextAuthOptions}
+ */
 export const authOptions: NextAuthOptions = {
-  // ✅ Export authOptions
   session: { strategy: 'jwt' },
   adapter: PrismaAdapter(prisma),
   providers: [

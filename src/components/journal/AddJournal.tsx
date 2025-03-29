@@ -80,7 +80,6 @@ function AddJournal() {
     }
   );
 
-  // Automatically fetch AI-generated suggestions when the content changes
   useEffect(() => {
     // Only process AI if AI is enabled and content exists
     if (!isAIEnabled || !content) return;
@@ -100,7 +99,6 @@ function AddJournal() {
     return () => clearTimeout(delay);
   }, [content, isAIEnabled]);
 
-  // Mutation for creating a new journal entry
   const { mutate: createJournalEntry, isLoading } = useMutation({
     mutationFn: createJournal,
     onSuccess: () => {
@@ -119,11 +117,9 @@ function AddJournal() {
     createJournalEntry(data);
   };
 
-  // Handler for switch to enable/disable AI
   const handleAIToggle = () => {
     setIsAIEnabled(!isAIEnabled);
 
-    // Clear AI-generated fields when disabled
     if (!isAIEnabled) {
       setValue('category', '');
       setValue('sentiment', '');
@@ -202,7 +198,6 @@ function AddJournal() {
         )}
       </div>
 
-      {/* AI Toggle Switch */}
       <div className='mb-4 flex items-center'>
         <label className='mr-2 text-sm'>Enable AI Suggestions</label>
         <Switch
@@ -212,7 +207,6 @@ function AddJournal() {
         />
       </div>
 
-      {/* AI Generated Fields - Only visible when AI is enabled */}
       {isAIEnabled && (
         <>
           <div className='mb-4'>

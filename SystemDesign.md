@@ -94,23 +94,50 @@ The Personal Journaling App empowers users to securely record their thoughts and
 
 ## 4. API Endpoints
 
-### 4.1 Journal Entry CRUD API
+**Note:** For a comprehensive list of all API endpoints and their specifications, including request and response bodies, please check the Swagger documentation:
 
-- `POST /api/journals`: Create a new journal entry.
-- `GET /api/journals`: Retrieve all journal entries for the authenticated user.
-- `GET /api/journals/{id}`: Retrieve a specific journal entry by its ID.
-- `PUT /api/journals/{id}`: Update an existing journal entry.
-- `DELETE /api/journals/{id}`: Delete a journal entry.
+📌 **VISIT** http://localhost:3000/docs
 
-### 4.2 AI-Powered Insights API
 
-- `POST /api/ai/categorize`: Suggests relevant categories for a given journal entry content.
-- `POST /api/ai/sentiment`: Returns the sentiment analysis (positive, neutral, or negative) of a journal entry.
-- `POST /api/ai/suggestions`: Provides AI-driven writing prompts or suggestions based on the journal entry content.
-- `GET /api/summary/word-trends`: Analyzes word frequency across journal entries.
-- `GET /api/summary/heatmap`: Generates a visual heatmap representing writing consistency over time.
+---
 
-**Note:** For a comprehensive list of all API endpoints and their specifications, including request and response bodies, please refer to the Swagger documentation (once implemented).
+
+### **4.1 Journal Entry CRUD API**  
+
+- **`GET /api/journal`** → Retrieve all journal entries for the authenticated user.  
+- **`POST /api/journal`** → Create a new journal entry.  
+- **`GET /api/journal/{id}`** → Retrieve a specific journal entry by its ID.  
+- **`PUT /api/journal/{id}`** → Update an existing journal entry.  
+- **`DELETE /api/journal/{id}`** → Delete a journal entry.  
+
+📌 **Authentication Required**: These endpoints require authentication using a **Bearer Token (JWT)**.  
+
+---
+
+### **4.2 AI-Powered Insights API**  
+
+- **`POST /api/ai`** → Processes AI-powered insights based on the given journal entry content.  
+  - **`promptType=category`** → Suggests relevant categories.  
+  - **`promptType=sentiment`** → Returns sentiment analysis (positive, neutral, or negative).  
+  - **`promptType=suggestions`** → Provides AI-driven writing prompts or suggestions.   
+ 
+
+---
+
+### **4.3 Authentication API (Signup & Login)**  
+
+- **`POST /api/auth/signup`** → Register a new user.  
+  - **Request Body:** `{ "name": "John Doe", "email": "johndoe@email.com", "password": "#Password123" }`  
+- **`POST /api/auth/login`** → Authenticate user and return a JWT.  
+  - **Request Body:** `{ "email": "johndoe@email.com", "password": "#Password123" }`  
+- **`GET /api/auth/session`** → Get the current authenticated user session.  
+- **`POST /api/auth/logout`** → Logout and invalidate the session.  
+
+📌 **Authentication**: Login returns a **JWT token**, which must be included in the `Authorization` header (`Bearer <token>`) for protected routes.  
+
+---
+
+
 
 ## 5. Ollama AI Implementation
 
