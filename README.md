@@ -113,5 +113,3 @@ For deploying the application, follow these steps:
    ```sh
    npm run build && npm start
    ```
-
----

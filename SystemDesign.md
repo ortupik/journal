@@ -42,9 +42,7 @@ The Personal Journaling App empowers users to securely record their thoughts and
 
 ## 3. Data Model Design
 
-(Derived from Prisma Schema with AI Enhancements)
-
-### 3.1 Journals Table (Updated for AI)
+### 3.1 Journals Table 
 
 | Column      | Type         | Constraints                     | AI-Powered?          | Description                                       |
 |-------------|--------------|---------------------------------|----------------------|---------------------------------------------------|
@@ -58,6 +56,41 @@ The Personal Journaling App empowers users to securely record their thoughts and
 | summary     | String?      |                                 | ✅ (AI-generated)     | Concise AI-generated summary of the entry        |
 | sentiment   | String?      | "Positive", "Neutral", "Negative" | ✅                    | AI-analyzed sentiment of the entry               |
 | suggestions | String?      |                                 | ✅                    | AI-driven writing prompts or suggestions related to the entry |
+
+### **3.2 Users Table**
+| Column         | Type       | Constraints |
+|---------------|-----------|-------------|
+| id            | UUID      | Primary Key, Auto-Generated |
+| name          | String?   | Nullable |
+| email         | String    | Unique, Required |
+| emailVerified | DateTime? | Nullable |
+| image         | String?   | Nullable (Profile Picture) |
+| password      | String    | Required (Hashed) |
+| createdAt     | DateTime  | Default: `now()` |
+| updatedAt     | DateTime  | Auto-updated |
+| accounts      | Relation  | One-to-Many with `Account` |
+| journals      | Relation  | One-to-Many with `Journal` |
+
+
+### **3.3 Account Table** *(For OAuth login)*
+| Column            | Type     | Constraints |
+|------------------|---------|-------------|
+| id              | UUID    | Primary Key |
+| userId          | UUID    | Foreign Key to `User` |
+| provider        | String  | OAuth Provider (e.g., Google, GitHub) |
+| providerAccountId | String  | Unique ID from provider |
+| access_token    | String? | OAuth Access Token |
+| refresh_token   | String? | OAuth Refresh Token |
+
+### **3.4 Sessions Table**
+| Column        | Type      | Constraints |
+|--------------|----------|-------------|
+| id           | UUID     | Primary Key |
+| sessionToken | String   | Unique |
+| userId       | UUID     | Foreign Key to `User` |
+| expires      | DateTime | Expiration Date |
+
+---
 
 ## 4. API Endpoints
 
