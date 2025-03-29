@@ -1,4 +1,4 @@
-# Personal Journaling App - System Design and Project Setup
+# Journaling App - System Design
 
 ## 1. Overview
 
@@ -112,7 +112,6 @@ The Personal Journaling App empowers users to securely record their thoughts and
 
 📌 **Authentication Required**: These endpoints require authentication using a **Bearer Token (JWT)**.  
 
----
 
 ### **4.2 AI-Powered Insights API**  
 
@@ -121,8 +120,6 @@ The Personal Journaling App empowers users to securely record their thoughts and
   - **`promptType=sentiment`** → Returns sentiment analysis (positive, neutral, or negative).  
   - **`promptType=suggestions`** → Provides AI-driven writing prompts or suggestions.   
  
-
----
 
 ### **4.3 Authentication API (Signup & Login)**  
 
@@ -331,7 +328,7 @@ To support 1M+ active users, the following scaling strategies would be crucial:
 
 ## 10. Setup Instructions
 
-*(Please Check SystemDesign.md for detailed system documentation)*
+*(Please Check ReadMe.md also)*
 
 ### Prerequisites
 
@@ -468,4 +465,3 @@ For deploying the application, follow these steps:
 ## Conclusion
 
 This comprehensive documentation outlines the system design and provides detailed setup instructions for the Personal Journaling App. By leveraging Next.js, PostgreSQL, Prisma, and Ollama, this application delivers a secure, scalable, and AI-enhanced journaling experience focused on user privacy. 🚀
-```
