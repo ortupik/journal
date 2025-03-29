@@ -124,8 +124,8 @@ function EditJournal() {
     mutationFn: ({ id, data }: { id: string; data: JournalEntryData }) =>
       updateJournal(id, data),
     onSuccess: () => {
-      successNotify('Journal updated successfully');
-      router.push('/dashboard/journal/all');
+      // successNotify('Journal updated successfully');
+      router.push('/dashboard/journal');
     },
     onError: (error) => {
       console.error('Failed to update journal:', error);

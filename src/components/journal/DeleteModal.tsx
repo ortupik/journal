@@ -3,36 +3,39 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { successNotify } from '@/helpers/toastifyHlp';
 import { deleteJournal } from '@/actions/journal';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 type Props = {
   id: string;
   closeModal: () => void;
 };
 
-function DeleteModal({ id, closeModal }: Props) {
+export default function DeleteModal({ id, closeModal }: Props) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isLoading, isSuccess } = useMutation({
     mutationFn: deleteJournal,
     onSuccess: () => {
-      // Invalidate the journals query to refresh the list
-      queryClient.invalidateQueries({ queryKey: ['journals'] });
-
-      // Show success notification
-      successNotify('Journal deleted successfully');
-
-      // Close the modal
       closeModal();
-
-      // Redirect to the journals page
-      router.push('/dashboard/journal/all');
+      queryClient.invalidateQueries({ queryKey: ['journals'] });
+      // successNotify('Journal deleted successfully');
     },
     onError: (error) => {
-      // Optional: Handle any errors during deletion
       console.error('Failed to delete journal:', error);
     }
   });
+
+  // Handle navigation separately after successful deletion
+  useEffect(() => {
+    if (isSuccess) {
+      const timeoutId = setTimeout(() => {
+        router.push('/dashboard/journal');
+      }, 100);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isSuccess, router]);
 
   const onConfirm = () => {
     try {
@@ -41,6 +44,7 @@ function DeleteModal({ id, closeModal }: Props) {
       console.error('Error in mutation:', error);
     }
   };
+
   return (
     <div className='fixed top-0 left-0 z-20 h-full w-full bg-black/50'>
       <div className='absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 transform flex-col gap-6 rounded-lg bg-white p-12'>
@@ -63,12 +67,10 @@ function DeleteModal({ id, closeModal }: Props) {
             disabled={isLoading}
             className='w-32 bg-red-500 px-4 py-2 text-sm text-white hover:bg-red-600'
           >
-            Delete
+            {isLoading ? 'Deleting...' : 'Delete'}
           </button>
         </div>
       </div>
     </div>
   );
 }
-
-export default DeleteModal;

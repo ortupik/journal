@@ -104,8 +104,8 @@ function AddJournal() {
   const { mutate: createJournalEntry, isLoading } = useMutation({
     mutationFn: createJournal,
     onSuccess: () => {
-      successNotify('Your journal entry has been successfully created!');
-      router.push('/dashboard/journal/all');
+      // successNotify('Your journal entry has been successfully created!');
+      router.push('/dashboard/journal');
     },
     onError: (error) => {
       console.error('Failed to create journal:', error);

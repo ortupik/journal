@@ -14,8 +14,10 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
+
     const journalEntry = await prisma.journal.findFirst({
-      where: { id: params.id, userId: session.user.id } // Filter by session user ID
+      where: { id, userId: session.user.id } // Filter by session user ID
     });
 
     if (!journalEntry) {
@@ -53,8 +55,10 @@ export async function PUT(
       );
     }
 
+    const { id } = await params;
+
     await prisma.journal.updateMany({
-      where: { id: params.id, userId: session.user.id }, // Ensure the user owns the journal
+      where: { id, userId: session.user.id }, // Ensure the user owns the journal
       data: body
     });
 

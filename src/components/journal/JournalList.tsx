@@ -3,11 +3,8 @@
 import { useState } from 'react';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-
 import { getAllJournals } from '@/actions/journal';
-
 import DeleteModal from './DeleteModal';
-import LoadMore from '../common/LoadMore';
 import JournalCard from './JournalCard';
 import Loader from '../common/Loader';
 
@@ -36,7 +33,9 @@ export default function JournalList() {
   const journals = data?.pages.flat() || [];
 
   const onDeleteBtnClk = (id: string) => setModal(id);
-  const closeModal = () => setModal('');
+  const closeModal = () => {
+    setModal('');
+  };
 
   if (isLoading) return <Loader wrapperCls='h-[calc(100vh-112px)]' />;
 
