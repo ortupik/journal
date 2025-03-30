@@ -224,7 +224,6 @@ function EditJournal() {
         router.push('/dashboard/journal');
       },
       onError: (error) => {
-        console.error('Failed to update journal:', error);
         errorNotify('Failed to update journal. Please try again.');
       }
     });

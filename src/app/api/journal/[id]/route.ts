@@ -3,6 +3,7 @@ import prisma from 'prisma/client';
 import { journalSchema } from '@/app/api/utils/validations';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'; // Import authOptions
+import { error } from 'console';
 
 /**
  * @swagger
@@ -115,6 +116,7 @@ export async function PUT(
 
     const body = await req.json();
     const validation = journalSchema.safeParse(body);
+
     if (!validation.success) {
       return NextResponse.json(
         { error: validation.error.format() },
