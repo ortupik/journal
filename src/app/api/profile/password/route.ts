@@ -10,6 +10,53 @@ const updatePasswordSchema = z.object({
   newPassword: z.string().min(6) // Example minimum password length
 });
 
+/**
+ * @swagger
+ * /api/profile/password:
+ * put:
+ * summary: Update the user's password
+ * description: Update the user's password. The old password must be provided if it exists.
+ * tags: [Profile]
+ * requestBody:
+ * required: true
+ * content:
+ * application/json:
+ * schema:
+ * type: object
+ * properties:
+ * oldPassword:
+ * type: string
+ * format: password
+ * description: The user's current password. Optional if user doesn't have a password.
+ * example: "oldPassword123"
+ * newPassword:
+ * type: string
+ * format: password
+ * description: The user's new password.
+ * example: "newPassword123"
+ * required:
+ * - oldPassword
+ * - newPassword
+ * responses:
+ * 200:
+ * description: Successfully updated password
+ * content:
+ * application/json:
+ * schema:
+ * type: object
+ * properties:
+ * message:
+ * type: string
+ * example: "Password updated successfully"
+ * 400:
+ * description: Invalid request body
+ * 401:
+ * description: Unauthorized
+ * 404:
+ * description: User not found
+ * 500:
+ * description: Internal Server Error
+ */
 export async function PUT(req: Request) {
   const session = await getServerSession(authOptions);
 

@@ -130,10 +130,16 @@ The Personal Journaling App empowers users to securely record their thoughts and
 - **`GET /api/auth/session`** → Get the current authenticated user session.  
 - **`POST /api/auth/logout`** → Logout and invalidate the session.  
 
+### **4.4 User Profile API**  
+
+- **`GET /api/profile`** → Retrieve the current authenticated user profile.  
+- **`PUT /api/profile/name`** → Update the authenticated user's name.  
+- **`PUT /api/profile/email`** → Update the authenticated user's email.  
+- **`PUT /api/profile/password`** → Update the authenticated user's password.  
+
 📌 **Authentication**: Login returns a **JWT token**, which must be included in the `Authorization` header (`Bearer <token>`) for protected routes.  
 
 ---
-
 
 
 ## 5. Ollama AI Implementation
@@ -181,6 +187,9 @@ Ensure the desired model ( `phi` or `llama3`) is pulled by Ollama.
 
 ✅ **Dependency Management:***(TODO)* Keep all dependencies (Node.js libraries, Prisma, Next.js) up-to-date to benefit from security patches without breaking the application due to mismatch
 
+✅ **Cloudflare Bot Detection:** *(TODO)* Integrate Cloudflare's bot detection to identify malicious traffic and prevent it from reaching the application
+
+
 ## 7. Scaling Considerations
 
 ### 7.1 Why Ollama is Scalable
@@ -210,17 +219,19 @@ To support 1M+ active users, the following scaling strategies would be crucial:
 - **Monitoring and Alerting:** Implement robust monitoring and alerting systems to track key metrics (CPU usage, memory usage, database performance, error rates) and proactively identify and address potential issues.
 
 ## 8. Potential Bottlenecks and How to Address Them
-
+- **AI Processing locally :** Users with older or less powerful devices might experience less accurate AI processing using the current **Phi 2.5B** model that I used. I also used an **11th Gen Intel Core i7 CPU** without GPU for development and testing, which provided a less than satsifactory perfomance.
+    - **Solution:** Recommend upgrading to a device with an **Nvidia GPU** featuring **CUDA Cores** and exploring more powerful models like **llama 4B** or **phi 6.1B** for improved accuracy. If performance is still a concern, consider using bigger paid cloud-based AI integration.
 - **Database Read/Write Performance:** With a large number of users and entries, the PostgreSQL database could become a bottleneck.
     - **Solution:** Implement indexing, partitioning, read replicas, and potentially sharding as described in the scaling section. Optimize database queries.
 - **Backend API Processing:** Handling a large volume of API requests could strain the backend servers.
     - **Solution:** Horizontal scaling of the backend API behind a load balancer. Optimize API endpoints and code for performance. Implement caching.
-- **AI Processing on User Devices:** While Ollama distributes the AI load, users with older or less powerful devices might experience slower processing times.
+
     - **Solution:** Clearly communicate system requirements. Offer the optional cloud-based AI integration for users who need more power or prefer not to run AI locally.
 - **Network Latency:** Users geographically distant from the backend servers might experience higher latency.
     - **Solution:** Utilize a CDN to serve static assets closer to users. Deploy backend API instances in multiple geographic regions if necessary.
 - **Cache Invalidation:** Incorrect cache invalidation can lead to stale data.
     - **Solution:** Implement effective cache invalidation strategies based on data changes.
+- **TODO Cloudflare Bot Detection:** Implement Cloudflare's Bot Detection to protect against malicious traffic.
 
 ## 9. Components That Might Need Redesign at Scale
 

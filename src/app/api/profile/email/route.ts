@@ -8,6 +8,42 @@ const updateEmailSchema = z.object({
   email: z.string().email()
 });
 
+/**
+ * Updates the user's email address.
+ *
+ * @param req - The request to update the user's email address
+ * @returns - The updated user data
+ *
+ * @swagger
+ * /api/profile/email:
+ * put:
+ * summary: Update the user's email address
+ * description: Updates the user's email address.
+ * tags: [Profile]
+ * requestBody:
+ * required: true
+ * content:
+ * application/json:
+ * schema:
+ * type: object
+ * properties:
+ * email:
+ * type: string
+ * format: email
+ * required:
+ * - email
+ * responses:
+ * 200:
+ * description: Successfully updated the user's email address
+ * 400:
+ * description: Invalid request body
+ * 401:
+ * description: Unauthorized
+ * 409:
+ * description: Email address already in use
+ * 500:
+ * description: Failed to update the user's email address
+ */
 export async function PUT(req: Request) {
   const session = await getServerSession(authOptions);
 
