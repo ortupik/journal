@@ -3,7 +3,9 @@ export const root = {
 };
 
 const endPoints = {
-  journal: `/journal`
+  journal: `/journal`,
+  profile: `/profile`,
+  users: `/users`
 };
 
 export default endPoints;

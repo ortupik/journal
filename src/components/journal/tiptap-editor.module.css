@@ -1,0 +1,102 @@
+/* Base Editor Container */
+.editor-container {
+  @apply overflow-hidden rounded-lg border border-gray-200 shadow-sm;
+}
+
+/* Toolbar */
+.editor-toolbar {
+  @apply sticky top-0 z-10 flex flex-wrap items-center gap-1 border-b border-gray-200 bg-gray-50 p-2;
+}
+
+/* Toolbar Button */
+.toolbar-button {
+  @apply rounded-md p-2 text-gray-700 transition-colors duration-150 hover:bg-gray-100;
+}
+
+/* Active Toolbar Button */
+.toolbar-button-active {
+  @apply bg-gray-200 text-gray-900;
+}
+
+/* Toolbar Divider */
+.toolbar-divider {
+  @apply mx-1 h-6 w-px bg-gray-300;
+}
+
+/* Color Picker Button */
+.color-button {
+  @apply h-5 w-5 rounded border border-gray-300 transition-all duration-150 hover:ring-2 hover:ring-offset-1;
+}
+
+/* Editor Content Area */
+.editor-content {
+  @apply prose prose-sm sm:prose-base lg:prose-lg min-h-[12rem] max-w-none bg-white p-4 focus:outline-none;
+}
+
+/* Placeholder Styling */
+.editor-placeholder {
+  @apply text-gray-400 italic;
+}
+
+/* Heading Styles */
+.editor-content h1 {
+  @apply mb-4 text-2xl font-bold text-gray-900;
+}
+
+.editor-content h2 {
+  @apply mb-3 text-xl font-bold text-gray-800;
+}
+
+.editor-content h3 {
+  @apply mb-2 text-lg font-bold text-gray-700;
+}
+
+/* List Styles */
+.editor-content ul,
+.editor-content ol {
+  @apply mb-4 pl-5;
+}
+
+/* Link Styles */
+.editor-content a {
+  @apply text-blue-600 underline hover:text-blue-800;
+}
+
+/* Dark Mode Support */
+.dark .editor-container {
+  @apply border-gray-700;
+}
+
+.dark .editor-toolbar {
+  @apply border-gray-700 bg-gray-800;
+}
+
+.dark .toolbar-button {
+  @apply text-gray-300 hover:bg-gray-700;
+}
+
+.dark .toolbar-button-active {
+  @apply bg-gray-700 text-gray-100;
+}
+
+.dark .toolbar-divider {
+  @apply bg-gray-600;
+}
+
+.dark .editor-content {
+  @apply bg-gray-900 text-gray-100;
+}
+
+.dark .editor-placeholder {
+  @apply text-gray-500;
+}
+
+.dark .editor-content h1,
+.dark .editor-content h2,
+.dark .editor-content h3 {
+  @apply text-gray-100;
+}
+
+.dark .editor-content a {
+  @apply text-blue-400 hover:text-blue-300;
+}
