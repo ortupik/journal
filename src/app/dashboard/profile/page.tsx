@@ -14,11 +14,20 @@ import endPoints from '@/app/api/utils/endPoints'; // Import endPoints
 
 type Tab = 'general' | 'email' | 'password';
 
+interface FormErrors {
+  name?: string;
+  newEmail?: string;
+  oldPassword?: string;
+  newPassword?: string;
+  confirmNewPassword?: string;
+}
+
 export default function Page() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [currentTab, setCurrentTab] = useState<Tab>('general');
   const [name, setName] = useState<string | null>(null);
   const [email, setEmail] = useState('');
@@ -53,23 +62,32 @@ export default function Page() {
 
   const handleTabChange = (tab: Tab) => {
     setCurrentTab(tab);
+    setFormErrors({}); // Clear errors when switching tabs
   };
 
   // General Tab Handlers
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
+    setFormErrors((prevErrors) => ({ ...prevErrors, name: undefined }));
   };
 
   const handleUpdateName = async () => {
     setLoading(true);
+    setFormErrors({});
+    if (!name?.trim()) {
+      setFormErrors({ name: 'Name is required.' });
+      setLoading(false);
+      return;
+    }
     try {
       await updateUserName({ name });
       toast.success('Name updated successfully!');
-      // Optionally, you could log the endpoint being used:
-      // console.log('Updating name via:', endPoints.profileName);
     } catch (err: any) {
       console.error('Error updating name:', err);
       toast.error(err?.message || 'Failed to update name.');
+      if (err?.message?.toLowerCase().includes('name')) {
+        setFormErrors({ name: err.message });
+      }
     } finally {
       setLoading(false);
     }
@@ -78,10 +96,22 @@ export default function Page() {
   // Email Tab Handlers
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewEmail(e.target.value);
+    setFormErrors((prevErrors) => ({ ...prevErrors, newEmail: undefined }));
   };
 
   const handleUpdateEmail = async () => {
     setLoading(true);
+    setFormErrors({});
+    if (!newEmail.trim()) {
+      setFormErrors({ newEmail: 'Email is required.' });
+      setLoading(false);
+      return;
+    }
+    if (!/\S+@\S+\.\S+/.test(newEmail)) {
+      setFormErrors({ newEmail: 'Invalid email format.' });
+      setLoading(false);
+      return;
+    }
     try {
       await updateUserEmail({ email: newEmail });
       setEmail(newEmail);
@@ -89,23 +119,52 @@ export default function Page() {
     } catch (err: any) {
       console.error('Error updating email:', err);
       toast.error(err?.message || 'Failed to update email.');
+      if (err?.message?.toLowerCase().includes('email')) {
+        setFormErrors({ newEmail: err.message });
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  // Password Tab Handlers
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPasswordData((prev) => ({ ...prev, [name]: value }));
+    setFormErrors((prevErrors) => ({ ...prevErrors, [name]: undefined }));
   };
 
   const handleUpdatePassword = async () => {
     setLoading(true);
+    setFormErrors({});
     const { oldPassword, newPassword, confirmNewPassword } = passwordData;
 
+    if (!oldPassword.trim()) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        oldPassword: 'Current password is required.'
+      }));
+    }
+    if (!newPassword.trim()) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        newPassword: 'New password is required.'
+      }));
+    }
+    if (!confirmNewPassword.trim()) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        confirmNewPassword: 'Confirm new password is required.'
+      }));
+    }
+
     if (newPassword !== confirmNewPassword) {
-      toast.error('New passwords do not match.');
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        confirmNewPassword: 'New passwords do not match.'
+      }));
+    }
+
+    if (Object.keys(formErrors).length > 0) {
       setLoading(false);
       return;
     }
@@ -118,10 +177,10 @@ export default function Page() {
         newPassword: '',
         confirmNewPassword: ''
       });
-      // console.log('Updating password via:', endPoints.profilePassword);
     } catch (err: any) {
       console.error('Error updating password:', err);
-      toast.error(err?.message || 'Failed to update password.');
+      toast.error(err || 'Failed to update password.');
+      setFormErrors({ newPassword: 'Password is not strong enough' });
     } finally {
       setLoading(false);
     }
@@ -142,19 +201,31 @@ export default function Page() {
       <div className='rounded-lg bg-white shadow'>
         <div className='flex border-b'>
           <button
-            className={`px-6 py-3 ${currentTab === 'general' ? 'border-b-2 border-blue-500 font-semibold' : 'text-gray-600 hover:text-blue-500'}`}
+            className={`px-6 py-3 ${
+              currentTab === 'general'
+                ? 'border-b-2 border-blue-500 font-semibold'
+                : 'text-gray-600 hover:text-blue-500'
+            }`}
             onClick={() => handleTabChange('general')}
           >
             General
           </button>
           <button
-            className={`px-6 py-3 ${currentTab === 'email' ? 'border-b-2 border-blue-500 font-semibold' : 'text-gray-600 hover:text-blue-500'}`}
+            className={`px-6 py-3 ${
+              currentTab === 'email'
+                ? 'border-b-2 border-blue-500 font-semibold'
+                : 'text-gray-600 hover:text-blue-500'
+            }`}
             onClick={() => handleTabChange('email')}
           >
             Update Email
           </button>
           <button
-            className={`px-6 py-3 ${currentTab === 'password' ? 'border-b-2 border-blue-500 font-semibold' : 'text-gray-600 hover:text-blue-500'}`}
+            className={`px-6 py-3 ${
+              currentTab === 'password'
+                ? 'border-b-2 border-blue-500 font-semibold'
+                : 'text-gray-600 hover:text-blue-500'
+            }`}
             onClick={() => handleTabChange('password')}
           >
             Update Password
@@ -177,14 +248,20 @@ export default function Page() {
                   id='name'
                   value={name || ''}
                   onChange={handleNameChange}
-                  className='focus:shadow-outline w-xs appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none'
+                  className={`focus:shadow-outline w-xs appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none ${
+                    formErrors.name ? 'border-red-500' : ''
+                  }`}
                 />
+                {formErrors.name && (
+                  <p className='mt-1 text-sm text-red-500'>{formErrors.name}</p>
+                )}
               </div>
               <button
                 onClick={handleUpdateName}
                 className='focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none'
+                disabled={loading}
               >
-                Update Name
+                {loading ? 'Updating...' : 'Update Name'}
               </button>
             </div>
           )}
@@ -205,14 +282,22 @@ export default function Page() {
                   id='newEmail'
                   value={newEmail}
                   onChange={handleEmailChange}
-                  className='focus:shadow-outline w-xs appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none'
+                  className={`focus:shadow-outline w-xs appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none ${
+                    formErrors.newEmail ? 'border-red-500' : ''
+                  }`}
                 />
+                {formErrors.newEmail && (
+                  <p className='mt-1 text-sm text-red-500'>
+                    {formErrors.newEmail}
+                  </p>
+                )}
               </div>
               <button
                 onClick={handleUpdateEmail}
                 className='focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none'
+                disabled={loading}
               >
-                Update Email
+                {loading ? 'Updating...' : 'Update Email'}
               </button>
             </div>
           )}
@@ -233,8 +318,15 @@ export default function Page() {
                   name='oldPassword'
                   value={passwordData.oldPassword}
                   onChange={handlePasswordChange}
-                  className='focus:shadow-outline w-xs appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none'
+                  className={`focus:shadow-outline w-xs appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none ${
+                    formErrors.oldPassword ? 'border-red-500' : ''
+                  }`}
                 />
+                {formErrors.oldPassword && (
+                  <p className='mt-1 text-sm text-red-500'>
+                    {formErrors.oldPassword}
+                  </p>
+                )}
               </div>
               <div className='mb-4'>
                 <label
@@ -249,8 +341,15 @@ export default function Page() {
                   name='newPassword'
                   value={passwordData.newPassword}
                   onChange={handlePasswordChange}
-                  className='focus:shadow-outline w-xs appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none'
+                  className={`focus:shadow-outline w-xs appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none ${
+                    formErrors.newPassword ? 'border-red-500' : ''
+                  }`}
                 />
+                {formErrors.newPassword && (
+                  <p className='mt-1 text-sm text-red-500'>
+                    {formErrors.newPassword}
+                  </p>
+                )}
               </div>
               <div className='mb-4'>
                 <label
@@ -265,14 +364,22 @@ export default function Page() {
                   name='confirmNewPassword'
                   value={passwordData.confirmNewPassword}
                   onChange={handlePasswordChange}
-                  className='focus:shadow-outline w-xs appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none'
+                  className={`focus:shadow-outline w-xs appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none ${
+                    formErrors.confirmNewPassword ? 'border-red-500' : ''
+                  }`}
                 />
+                {formErrors.confirmNewPassword && (
+                  <p className='mt-1 text-sm text-red-500'>
+                    {formErrors.confirmNewPassword}
+                  </p>
+                )}
               </div>
               <button
                 onClick={handleUpdatePassword}
                 className='focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none'
+                disabled={loading}
               >
-                Update Password
+                {loading ? 'Updating...' : 'Update Password'}
               </button>
             </div>
           )}

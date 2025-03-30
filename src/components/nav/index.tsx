@@ -54,7 +54,7 @@ function Nav() {
               className='bg-slate-900 text-sm text-white transition-colors hover:bg-slate-700'
               onClick={() =>
                 signOut({ redirect: false }).then(() => {
-                  router.push('/login');
+                  router.push('/');
                 })
               }
             >
