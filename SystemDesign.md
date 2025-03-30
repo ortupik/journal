@@ -20,19 +20,7 @@ The Personal Journaling App empowers users to securely record their thoughts and
                                               
 ```
 
-### 2.2 Why Ollama for AI Processing?
-
-✅ **On-Device AI Processing:** Eliminates the need for cloud-based AI APIs, significantly reducing latency and operational costs.
-
-✅ **Privacy-Focused:** Ensures that sensitive journal data remains within the user's local environment, enhancing data security and privacy.
-
-✅ **Offline Capability:** Enables AI-powered features to function even without an active internet connection.
-
-✅ **Fast Response Time:** Local execution of AI models by Ollama minimizes API call delays, providing quicker insights.
-
-✅ **Open-Source & Customizable:** Offers the flexibility to easily fine-tune AI models to better suit individual journaling preferences and needs.
-
-### 2.3 Comparison of AI Model Choices
+### 2.2 Comparison of AI Model Choices
 
 | AI Model              | Pros                                                    | Cons                                                |
 |-----------------------|---------------------------------------------------------|-----------------------------------------------------|
@@ -194,9 +182,11 @@ Ensure the desired model ( `phi` or `llama3`) is pulled by Ollama.
 
 ### 7.1 Why I used Ollama
 
-- **Local AI Processing:** Offloads AI computation from the paid cloud and backend servers to my local setup, eliminating per-request AI costs. I'm that cheap. But since the AI requirements are marginal, a pretrained small model like phi 2.5B can do the job for this application for a fraction of the cost. Didn't use DeepSeek R1 to avoid reasoning overhead.
+- **Local AI Processing:** Offloads AI computation from the paid cloud and backend servers to my local setup, eliminating per-request AI costs. I'm that cheap. And since the AI requirements are marginal, a pretrained small model based on phi 2.5B can do the job for this application for a fraction of the cost. Later one could strip the model of non essential parameters and retrain it to be more suitable for Natural Language Processing specically for our use case. Didn't find DeepSeek R1 1.5B model suitable cause the reasoning overhead was not worth it for this simple use case.
 - **Horizontal Scaling:** As the user base grows, the AI processing scales with the number of users and their devices, rather than requiring more powerful central servers.
 - **Edge Caching:** Next.js Incremental Static Regeneration (ISR) can cache responses that might involve AI computations, reducing the need for repeated processing. Later I could use Redis for better cache complexities and config optimizations
+- **Fast Response Time:** Local execution of AI models by Ollama minimizes API call delays, providing quicker insights.
+- **Open-Source & Customizable:** Offers the flexibility to easily fine-tune AI models to better suit individual journaling preferences and needs.
 
 ### 7.2 Additional Optimizations
 
